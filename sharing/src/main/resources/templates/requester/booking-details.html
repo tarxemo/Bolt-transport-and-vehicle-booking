@@ -1,0 +1,134 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Booking Details</title>
+</head>
+<body>
+<section class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6">
+        <a th:href="@{/requester/bookings}" class="inline-flex items-center text-primary hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-2"></i> Back to bookings
+        </a>
+        <h1 class="text-2xl font-bold text-primary mt-2">Booking Details</h1>
+    </div>
+
+    <div class="bg-gray-50 p-6 rounded-lg mb-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
+            <div>
+                <h2 class="text-lg font-medium" th:text="'Booking #' + ${booking.id}"></h2>
+                <p class="text-sm text-gray-500" th:text="${#temporals.format(booking.bookingTime, 'MMM dd, yyyy hh:mm a')}"></p>
+            </div>
+
+            <span th:class="${booking.status == 'Accepted' ? 'bg-green-100 text-green-800' :
+                                             booking.status == 'Rejected' ? 'bg-red-100 text-red-800' :
+                                             'bg-yellow-100 text-yellow-800'} + ' px-2 py-1 rounded-full text-xs font-medium'">
+                                <span th:text="${booking.status}"></span>
+                            </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h3 class="text-md font-medium mb-2">Trip Information</h3>
+                <div class="space-y-3">
+                    <div>
+                        <p class="text-sm text-gray-500">From</p>
+                        <p class="font-medium" th:text="${booking.pickupLocation.name} + ', ' + ${booking.pickupLocation.city}"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">To</p>
+                        <p class="font-medium" th:text="${booking.dropoffLocation.name} + ', ' + ${booking.dropoffLocation.city}"></p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Pickup Time</p>
+                        <p class="font-medium" th:text="${#temporals.format(booking.pickupTime, 'MMM dd, yyyy hh:mm a')}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-md font-medium mb-2">Vehicle Information</h3>
+                <div class="flex items-start">
+                    <div class="flex-shrink-0 mr-4">
+                        <i class="fas fa-car text-3xl text-primary"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium" th:text="${booking.vehicle.make} + ' ' + ${booking.vehicle.model}"></p>
+                        <p class="text-sm text-gray-500" th:text="${booking.vehicle.licensePlate}"></p>
+                        <p class="text-sm text-gray-500" th:text="${booking.vehicle.vehicleType} + ' • ' + ${booking.vehicle.capacity} + ' seats'"></p>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <h3 class="text-md font-medium mb-2">Driver Information</h3>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 mr-3">
+                            <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+                        </div>
+                        <div>
+                            <p class="font-medium" th:text="${booking.vehicle.owner.firstName} + ' ' + ${booking.vehicle.owner.lastName}"></p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                <span>4.8 (24 reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gray-50 p-6 rounded-lg">
+        <h2 class="text-lg font-medium mb-4">Payment Summary</h2>
+
+        <div class="space-y-3">
+            <div class="flex justify-between">
+                <span class="text-gray-600">Base Fare</span>
+                <span th:text="'$' + ${#numbers.formatDecimal(booking.fare, 1, 2)}"></span>
+            </div>
+
+            <div class="flex justify-between">
+                <span class="text-gray-600">Discount</span>
+                <span>$0.00</span>
+            </div>
+
+            <div class="border-t border-gray-200 my-2"></div>
+
+            <div class="flex justify-between font-medium">
+                <span>Total</span>
+                <span class="text-primary" th:text="'$' + ${#numbers.formatDecimal(booking.fare, 1, 2)}"></span>
+            </div>
+
+            <div class="border-t border-gray-200 my-2"></div>
+
+            <div class="flex justify-between text-sm">
+                <span class="text-gray-500">Payment Method</span>
+                <span class="text-gray-500">Credit Card ****4242</span>
+            </div>
+        </div>
+
+        <div th:if="${booking.status == 'Pending'}" class="mt-6 pt-4 border-t border-gray-200">
+            <p class="text-sm text-gray-500 mb-4">Your booking is pending approval from the vehicle owner.</p>
+            <a th:href="@{'/requester/bookings/cancel/' + ${booking.id}}"
+               class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Cancel Booking
+            </a>
+        </div>
+
+        <div th:if="${booking.status == 'Accepted'}" class="mt-6 pt-4 border-t border-gray-200">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                <p class="text-sm text-gray-500">Your booking has been confirmed!</p>
+            </div>
+
+            <div class="mt-4 flex space-x-3">
+                <a href="#" class="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    <i class="fas fa-phone-alt mr-2"></i> Contact Driver
+                </a>
+                <a href="#" class="inline-flex items-center px-3 py-1.5 border border-gray-300 text-sm font-medium rounded shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                    <i class="fas fa-map-marker-alt mr-2"></i> Track Vehicle
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

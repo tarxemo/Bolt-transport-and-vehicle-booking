@@ -1,0 +1,79 @@
+<!-- admin/route-form.html -->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="${route.id != null} ? 'Edit Route' : 'Add New Route'"></title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-primary"
+            th:text="${route.id != null} ? 'Edit Route Details' : 'Add a New Route'">
+        </h1>
+        <a href="/admin/routes" class="text-primary hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Routes
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+        <form th:action="@{/admin/routes/save}" th:object="${route}" method="post" class="space-y-4">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <!-- Starting Point -->
+            <div>
+                <label for="startingPointId" class="block text-sm font-medium text-gray-700">Starting Point</label>
+                <select id="startingPointId" name="startingPointId" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                    <option value="" disabled selected>Select a starting location</option>
+                    <option th:each="loc : ${locations}"
+                            th:value="${loc.id}"
+                            th:text="${loc.name}"></option>
+                </select>
+            </div>
+
+            <!-- Destination Point -->
+            <div>
+                <label for="destinationPointId" class="block text-sm font-medium text-gray-700">Destination Point</label>
+                <select id="destinationPointId" name="destinationPointId" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                    <option value="" disabled selected>Select a destination</option>
+                    <option th:each="loc : ${locations}"
+                            th:value="${loc.id}"
+                            th:text="${loc.name}"></option>
+                </select>
+            </div>
+
+            <!-- Distance -->
+            <div>
+                <label for="distance" class="block text-sm font-medium text-gray-700">Distance (in kilometers)</label>
+                <input type="number" id="distance" step="0.01" th:field="*{distance}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" />
+            </div>
+
+            <!-- Estimated Time -->
+            <div>
+                <label for="estimatedTime" class="block text-sm font-medium text-gray-700">Estimated Time (in hours)</label>
+                <input type="number" id="estimatedTime" step="0.01" th:field="*{estimatedTime}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" />
+            </div>
+
+            <!-- Base Price -->
+            <div>
+                <label for="basePrice" class="block text-sm font-medium text-gray-700">Base Price (in USD)</label>
+                <input type="number" id="basePrice" step="0.01" th:field="*{basePrice}" required
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary" />
+            </div>
+
+            <!-- Submit -->
+            <div class="pt-4">
+                <button type="submit"
+                        class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-700 transition w-full">
+                    Save Route
+                </button>
+            </div>
+
+        </form>
+    </div>
+</section>
+</body>
+</html>

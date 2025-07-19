@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Search Results</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="bg-white shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-primary mb-4">Available Vehicles</h1>
+        <p class="text-gray-600 mb-6">
+            From <span class="font-medium" th:text="${fromLocation.name} + ', ' + ${fromLocation.city}"></span>
+            to <span class="font-medium" th:text="${toLocation.name} + ', ' + ${toLocation.city}"></span>
+        </p>
+
+        <div th:if="${vehicles.empty}" class="text-center py-8">
+            <i class="fas fa-car text-4xl text-gray-300 mb-4"></i>
+            <p class="text-gray-500">No available vehicles found for this route.</p>
+            <a th:href="@{/requester/search}" class="mt-4 inline-block text-primary hover:text-blue-700">
+                <i class="fas fa-arrow-left mr-2"></i> Try another search
+            </a>
+        </div>
+
+        <div th:unless="${vehicles.empty}" class="space-y-4">
+            <div th:each="vehicle : ${vehicles}" class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-lg font-medium" th:text="${vehicle.make} + ' ' + ${vehicle.model} + ' (' + ${vehicle.year} + ')'"></h3>
+                        <div class="flex items-center mt-1 text-sm text-gray-500">
+                            <span class="mr-4"><i class="fas fa-car mr-1"></i> <span th:text="${vehicle.vehicleType}"></span></span>
+                            <span><i class="fas fa-users mr-1"></i> <span th:text="${vehicle.capacity} + ' seats'"></span></span>
+                        </div>
+                        <div class="mt-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i> Available
+                                </span>
+                            <span class="ml-2 text-sm text-gray-500">
+                                    <i class="fas fa-map-marker-alt mr-1"></i>
+                                    <span th:text="${vehicle.currentLocation.name}"></span>
+                                </span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-end">
+                    <span class="text-xl font-bold text-primary"
+                          th:text="'$' + ${#numbers.formatDecimal(vehicle.route.basePrice, 1, 2)}">
+                    </span>
+                        <a th:href="@{'/requester/book/' + ${vehicle.id} + '?fromLocationId=' + ${fromLocation.id} + '&toLocationId=' + ${toLocation.id}}"
+                           class="mt-2 inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                            Book Now
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-user-circle text-2xl text-gray-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-gray-900" th:text="${vehicle.owner.firstName} + ' ' + ${vehicle.owner.lastName}"></p>
+                            <div class="flex text-sm text-gray-500">
+                                <span class="mr-3"><i class="fas fa-star text-yellow-400 mr-1"></i> 4.8</span>
+                                <span><i class="fas fa-car mr-1"></i> 5 vehicles</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

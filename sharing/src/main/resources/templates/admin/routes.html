@@ -1,0 +1,47 @@
+<!-- admin/routes.html -->
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>All Routes</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-primary">All Routes</h1>
+        <a href="/admin/routes/add" class="bg-primary text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+            <i class="fas fa-plus mr-2"></i>Add New Route
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">To</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Distance (km)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Est. Time (hr)</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price ($)</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <tr th:each="route : ${routes}">
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${route.startingPoint.name}">From</td>
+                <td class="px-6 py-4 whitespace-nowrap" th:text="${route.destinationPoint.name}">To</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" th:text="${route.distance}">Distance</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700" th:text="${route.estimatedTime}">Time</td>
+                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900" th:text="'$' + ${route.basePrice}">Price</td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a th:href="@{'/admin/routes/edit/' + ${route.id}}" class="text-primary hover:text-blue-700 mr-4">Edit</a>
+                    <a th:href="@{'/admin/routes/delete/' + ${route.id}}" class="text-red-600 hover:text-red-900"
+                       onclick="return confirm('Are you sure you want to delete this route?');">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>System Settings</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-primary">System Settings</h1>
+        <a th:href="@{/admin/dashboard}" class="text-primary hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium">Application Settings</h2>
+        </div>
+
+        <div class="divide-y divide-gray-200">
+            <div th:each="setting : ${settings}" class="px-6 py-4 flex justify-between items-center">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-900" th:text="${setting.settingKey.replace('_', ' ')}"></h3>
+                    <p class="text-sm text-gray-500" th:text="${setting.description}"></p>
+                </div>
+                <div class="flex items-center">
+                    <span class="mr-4 text-sm" th:text="${setting.settingValue}"></span>
+                    <a th:href="@{'/admin/settings/edit/' + ${setting.id}}" class="text-primary hover:text-blue-700">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-lg font-medium">Vehicle Type Settings</h2>
+        </div>
+
+        <div class="px-6 py-4">
+            <form th:action="@{/admin/settings/save}" method="post" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="sedanRate" class="block text-sm font-medium text-gray-700">Sedan Base Rate</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="text" name="sedanRate" id="sedanRate" value="25.00" class="focus:ring-primary focus:border-primary block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="suvRate" class="block text-sm font-medium text-gray-700">SUV Base Rate</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="text" name="suvRate" id="suvRate" value="35.00" class="focus:ring-primary focus:border-primary block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="vanRate" class="block text-sm font-medium text-gray-700">Van Base Rate</label>
+                        <div class="mt-1 relative rounded-md shadow-sm">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <span class="text-gray-500 sm:text-sm">$</span>
+                            </div>
+                            <input type="text" name="vanRate" id="vanRate" value="45.00" class="focus:ring-primary focus:border-primary block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit"
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        Save Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>
