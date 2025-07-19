@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:fragment="layout(title, section)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">Transport Booking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#065084',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        input{
+            outline: none;
+            padding: 6px;
+            border: none;
+            border-bottom: 2px blue solid;
+            background-color: #f3f0f0;
+            margin-left: 5px;
+            height: 1.5rem;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Your tailwind & other includes -->
+</head>
+<body class="bg-gray-50">
+
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!-- Main Content -->
+<main class="container mx-auto px-4 py-8">
+    <div th:replace="~{fragments/alerts :: alerts}"></div>
+    <div th:replace="${section}"></div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- Scripts -->
+<script src="/js/main.js"></script>
+</body>
+</html>

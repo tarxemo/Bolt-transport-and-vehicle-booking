@@ -1,0 +1,103 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>My Vehicles</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-primary">My Vehicles</h1>
+        <div class="flex space-x-4">
+            <a th:href="@{/owner/dashboard}" class="text-primary hover:text-blue-700">
+                <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+            </a>
+            <a th:href="@{/owner/vehicles/add}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-primary hover:bg-blue-700">
+                <i class="fas fa-plus mr-1"></i> Add Vehicle
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                <div class="mb-4 md:mb-0">
+                    <input type="text" placeholder="Search vehicles..." class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                </div>
+                <div class="flex space-x-2">
+                    <select class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                        <option>All Types</option>
+                        <option>Sedan</option>
+                        <option>SUV</option>
+                        <option>Van</option>
+                        <option>Luxury</option>
+                    </select>
+                    <select class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary">
+                        <option>All Statuses</option>
+                        <option>Available</option>
+                        <option>Not Available</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${vehicles.empty}" class="text-center py-8">
+            <i class="fas fa-car text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No vehicles found</h3>
+            <p class="mt-1 text-sm text-gray-500">You haven't added any vehicles yet</p>
+            <a th:href="@{/owner/vehicles/add}" class="mt-4 inline-block text-primary hover:text-blue-700">
+                <i class="fas fa-plus mr-1"></i> Add Vehicle
+            </a>
+        </div>
+
+        <div th:unless="${vehicles.empty}" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            <div th:each="vehicle : ${vehicles}" class="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                <div class="h-40 bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-car text-5xl text-gray-400"></i>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-bold" th:text="${vehicle.make} + ' ' + ${vehicle.model}"></h3>
+                            <p class="text-sm text-gray-500" th:text="${vehicle.licensePlate}"></p>
+                        </div>
+                        <span th:class="${vehicle.isAvailable} ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'"
+                              class="px-2 py-1 rounded-full text-xs font-medium">
+                                <span th:text="${vehicle.isAvailable} ? 'Available' : 'Not Available'"></span>
+                            </span>
+                    </div>
+
+                    <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+                        <div>
+                            <p class="text-gray-500">Type</p>
+                            <p th:text="${vehicle.vehicleType}"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Capacity</p>
+                            <p th:text="${vehicle.capacity} + ' seats'"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Year</p>
+                            <p th:text="${vehicle.year}"></p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500">Location</p>
+                            <p th:text="${vehicle.currentLocation != null} ? ${vehicle.currentLocation.name} : 'Not set'"></p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between">
+                        <a th:href="@{'/owner/vehicles/edit/' + ${vehicle.id}}"
+                           class="text-sm text-primary hover:text-blue-700">
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </a>
+                        <a th:href="@{'/owner/vehicles/delete/' + ${vehicle.id}}"
+                           class="text-sm text-red-600 hover:text-red-900">
+                            <i class="fas fa-trash mr-1"></i> Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

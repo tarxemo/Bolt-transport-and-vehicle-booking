@@ -1,0 +1,98 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+  <title>My Bookings</title>
+</head>
+<body>
+<section class="space-y-6">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-primary">My Bookings</h1>
+    <a th:href="@{/requester/dashboard}" class="text-primary hover:text-blue-700">
+      <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+    </a>
+  </div>
+
+  <div class="bg-white shadow rounded-lg overflow-hidden">
+    <div class="border-b border-gray-200">
+      <nav class="flex -mb-px">
+        <a th:href="@{/requester/bookings}" th:class="${status == null} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+           class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+          All Bookings
+        </a>
+        <a th:href="@{/requester/bookings(status='Pending')}" th:class="${status == 'Pending'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+           class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+          Pending
+        </a>
+        <a th:href="@{/requester/bookings(status='Accepted')}" th:class="${status == 'Accepted'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+           class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+          Accepted
+        </a>
+        <a th:href="@{/requester/bookings(status='Rejected')}" th:class="${status == 'Rejected'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+           class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+          Rejected
+        </a>
+      </nav>
+    </div>
+
+    <div th:if="${bookings.empty}" class="text-center py-8">
+      <i class="fas fa-car text-4xl text-gray-300 mb-4"></i>
+      <h3 class="text-lg font-medium text-gray-900">No bookings found</h3>
+      <p class="mt-1 text-sm text-gray-500" th:text="${status != null} ? 'No ' + ${status} + ' bookings' : 'You have no bookings yet'"></p>
+      <a th:href="@{/requester/search}" class="mt-4 inline-block text-primary hover:text-blue-700">
+        <i class="fas fa-search mr-2"></i> Find a Vehicle
+      </a>
+    </div>
+
+    <div th:unless="${bookings.empty}" class="divide-y divide-gray-200">
+      <div th:each="booking : ${bookings}" class="p-6 hover:bg-gray-50">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div class="mb-4 md:mb-0">
+            <div class="flex items-center">
+              <h3 class="text-lg font-medium" th:text="'Booking #' + ${booking.id}"></h3>
+
+              <span th:class="${booking.status == 'Accepted' ? 'bg-green-100 text-green-800' :
+                                             booking.status == 'Rejected' ? 'bg-red-100 text-red-800' :
+                                             'bg-yellow-100 text-yellow-800'} + ' px-2 py-1 rounded-full text-xs font-medium'">
+                                <span th:text="${booking.status}"></span>
+                            </span>
+            </div>
+            <p class="text-sm text-gray-500" th:text="${#temporals.format(booking.bookingTime, 'MMM dd, yyyy hh:mm a')}"></p>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <a th:href="@{'/requester/bookings/' + ${booking.id}}"
+               class="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+              View Details
+            </a>
+            <a th:if="${booking.status == 'Pending'}"
+               th:href="@{'/requester/bookings/cancel/' + ${booking.id}}"
+               class="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+              Cancel
+            </a>
+          </div>
+        </div>
+
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <p class="text-sm text-gray-500">Vehicle</p>
+            <p class="font-medium" th:text="${booking.vehicle.make} + ' ' + ${booking.vehicle.model}"></p>
+            <p class="text-sm text-gray-500" th:text="${booking.vehicle.licensePlate}"></p>
+          </div>
+
+          <div>
+            <p class="text-sm text-gray-500">Trip</p>
+            <p class="font-medium" th:text="${booking.pickupLocation.name}"></p>
+            <p class="text-sm text-gray-500" th:text="'to ' + ${booking.dropoffLocation.name}"></p>
+          </div>
+
+          <div>
+            <p class="text-sm text-gray-500">Driver</p>
+            <p class="font-medium" th:text="${booking.vehicle.owner.firstName} + ' ' + ${booking.vehicle.owner.lastName}"></p>
+            <p class="text-sm text-gray-500" th:text="${booking.vehicle.owner.phoneNumber}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<th:block th:fragment="title"></th:block>
+
+<body>
+<th:block th:fragment="section">
+<section class="relative">
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Book Your Perfect Ride</h1>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Find reliable transportation services for your trips across the city</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a th:href="@{/register/requester}" class="px-6 py-3 bg-white text-primary font-medium rounded-md shadow-md hover:bg-gray-100 transition duration-300">
+                    Book a Ride
+                </a>
+                <a th:href="@{/register/owner}" class="px-6 py-3 border-2 border-white text-white font-medium rounded-md hover:bg-white hover:text-primary transition duration-300">
+                    Become a Driver
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works -->
+    <div class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">How It Works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-search text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Search Vehicles</h3>
+                    <p class="text-gray-600">Find available vehicles for your route with real-time availability</p>
+                </div>
+                <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-car text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Book Your Ride</h3>
+                    <p class="text-gray-600">Select your preferred vehicle and confirm your booking</p>
+                </div>
+                <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-route text-primary text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Enjoy Your Trip</h3>
+                    <p class="text-gray-600">Track your vehicle and enjoy a comfortable journey</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vehicle Types -->
+    <div class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Vehicle Options</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-car text-5xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Standard Sedan</h3>
+                        <p class="text-gray-600 mb-3">Comfortable rides for up to 4 passengers</p>
+                        <p class="font-semibold text-primary">From $25</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-shuttle-van text-5xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">SUV</h3>
+                        <p class="text-gray-600 mb-3">Spacious vehicles for up to 6 passengers</p>
+                        <p class="font-semibold text-primary">From $35</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-van-shuttle text-5xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Minivan</h3>
+                        <p class="text-gray-600 mb-3">Large capacity for up to 8 passengers</p>
+                        <p class="font-semibold text-primary">From $45</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="h-40 bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-car-side text-5xl text-gray-400"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg mb-2">Luxury</h3>
+                        <p class="text-gray-600 mb-3">Premium vehicles for special occasions</p>
+                        <p class="font-semibold text-primary">From $65</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="bg-primary text-white py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to Ride?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Join thousands of satisfied customers who trust our transportation services</p>
+            <a th:href="@{/register/requester}" class="inline-block px-8 py-3 bg-white text-primary font-bold rounded-md shadow-lg hover:bg-gray-100 transition duration-300">
+                Get Started Now
+            </a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

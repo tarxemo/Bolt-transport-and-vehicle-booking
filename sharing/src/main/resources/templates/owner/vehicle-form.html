@@ -1,0 +1,102 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="${vehicle.id != null} ? 'Edit Vehicle' : 'Add Vehicle'">Vehicle Form</title>
+</head>
+<body>
+<section class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <div class="mb-6">
+        <a th:href="@{/owner/vehicles}" class="inline-flex items-center text-primary hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Vehicles
+        </a>
+        <h1 class="text-2xl font-bold text-primary mt-2" th:text="${vehicle.id != null} ? 'Edit Vehicle' : 'Add New Vehicle'"></h1>
+    </div>
+
+    <form th:action="@{/owner/vehicles/save}" th:object="${vehicle}" method="post" class="space-y-4">
+        <input type="hidden" th:field="*{id}">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label for="make" class="block text-sm font-medium text-gray-700">Make</label>
+                <input type="text" id="make" th:field="*{make}" required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+
+            <div>
+                <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+                <input type="text" id="model" th:field="*{model}" required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+                <input type="number" id="year" th:field="*{year}" min="1900" max="2023" required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+
+            <div>
+                <label for="licensePlate" class="block text-sm font-medium text-gray-700">License Plate</label>
+                <input type="text" id="licensePlate" th:field="*{licensePlate}" required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+
+            <div>
+                <label for="capacity" class="block text-sm font-medium text-gray-700">Passenger Capacity</label>
+                <input type="number" id="capacity" th:field="*{capacity}" min="1" required
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+            </div>
+        </div>
+
+        <div>
+            <label for="vehicleType" class="block text-sm font-medium text-gray-700">Vehicle Type</label>
+            <select id="vehicleType" th:field="*{vehicleType}" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                <option value="">Select vehicle type</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="Van">Van</option>
+                <option value="Bus">Bus</option>
+                <option value="Luxury">Luxury</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="currentLocation.id" class="block text-sm font-medium text-gray-700">Current Location</label>
+            <select id="currentLocation.id" th:field="*{currentLocation.id}"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                <option value="">Select current location</option>
+                <option th:each="location : ${locations}"
+                        th:value="${location.id}"
+                        th:text="${location.name} + ', ' + ${location.city}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="route.id" class="block text-sm font-medium text-gray-700">Assigned Route</label>
+            <select id="route.id" th:field="*{route.id}"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary">
+                <option value="">Select route</option>
+                <option th:each="route : ${routes}"
+                        th:value="${route.id}"
+                        th:text="${route.startingPoint.name} + ' → ' + ${route.destinationPoint.name} + ' (' + ${route.distance} + ' km)'">
+                </option>
+            </select>
+        </div>
+
+<!--        <div class="flex items-center">-->
+<!--            <input id="isAvailable" th:field="*{isAvailable}" type="checkbox"-->
+<!--                   class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">-->
+<!--            <label for="isAvailable" class="ml-2 block text-sm text-gray-700">Vehicle is currently available</label>-->
+<!--        </div>-->
+
+        <div class="pt-4">
+            <button type="submit"
+                    class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                Save Vehicle
+            </button>
+        </div>
+
+    </form>
+</section>
+</body>
+</html>

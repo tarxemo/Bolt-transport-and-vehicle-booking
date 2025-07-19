@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="Locations">Location Form</title>
+</head>
+<body class="p-8 bg-gray-50">
+<section class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-xl font-bold">Locations</h1>
+    <a th:href="@{/admin/locations/add}"
+       class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Add New Location
+    </a>
+</div>
+
+<table class="min-w-full bg-white rounded-lg shadow">
+    <thead class="bg-gray-100">
+    <tr>
+        <th class="px-4 py-2 text-left">ID</th>
+        <th class="px-4 py-2 text-left">Name</th>
+        <th class="px-4 py-2 text-left">Address</th>
+        <th class="px-4 py-2 text-left">City</th>
+        <th class="px-4 py-2 text-left">State</th>
+        <th class="px-4 py-2 text-left">Country</th>
+        <th class="px-4 py-2 text-left">Postal Code</th>
+        <th class="px-4 py-2 text-left">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="location : ${locations}" class="border-b hover:bg-gray-50">
+        <td class="px-4 py-2" th:text="${location.id}">1</td>
+        <td class="px-4 py-2" th:text="${location.name}">Example Name</td>
+        <td class="px-4 py-2" th:text="${location.address}">Example Address</td>
+        <td class="px-4 py-2" th:text="${location.city}">Example City</td>
+        <td class="px-4 py-2" th:text="${location.state}">Example State</td>
+        <td class="px-4 py-2" th:text="${location.country}">Example Country</td>
+        <td class="px-4 py-2" th:text="${location.postalCode}">12345</td>
+        <td class="px-4 py-2 flex space-x-2">
+            <a th:href="@{/admin/locations/edit/{id}(id=${location.id})}"
+               class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">
+                Edit
+            </a>
+            <a th:href="@{'/admin/locations/delete/' + ${location.id}}"
+               onclick="return confirm('Are you sure you want to delete this location?');"
+               class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700">
+                Delete
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</section>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     class="fragment"
+     th:fragment="navbar">
+
+<nav class="bg-primary text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="/" class="text-xl font-bold">TransportBooking</a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8">
+                    <div>
+                        <a th:href="@{/}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Home</a>
+                    </div>
+
+                    <!-- Role-based links -->
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/admin/dashboard}" class="px-1 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Dashboard</a>
+                        <a th:href="@{/admin/locations}" class="px-1 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Locations</a>
+                        <a th:href="@{/admin/routes}" class="px-1 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Routes</a>
+                        <a th:href="@{/admin/users}" class="px-1 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Users</a>
+                        <a th:href="@{/admin/settings}" class="px-1 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Settings</a>
+                    </div>
+                    <div sec:authorize="hasRole('OWNER')">
+                        <a th:href="@{/owner/dashboard}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Dashboard</a>
+                        <a th:href="@{/owner/vehicles}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Vehicles</a>
+                        <a th:href="@{/owner/bookings}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Bookings</a>
+                    </div>
+                    <div sec:authorize="hasRole('REQUESTER')">
+                        <a th:href="@{/requester/dashboard}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Dashboard</a>
+                        <a th:href="@{/requester/search}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Search</a>
+                        <a th:href="@{/requester/bookings}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Bookings</a>
+                    </div>
+                </div>
+
+                <!-- Auth Links -->
+                <div class="hidden md:flex items-center space-x-4">
+
+                    <!-- Profile Dropdown -->
+                    <div class="relative" th:if="${currentUser != null}">
+                        <button id="dropdownButton" class="flex items-center space-x-2 focus:outline-none">
+                            <span th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}">User</span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+
+                        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden">
+                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                            <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
+                        </div>
+                    </div>
+
+                    <script>
+                        const button = document.getElementById('dropdownButton');
+                        const menu = document.getElementById('dropdownMenu');
+
+                        button.addEventListener('click', () => {
+                            menu.classList.toggle('hidden');
+                        });
+
+                        // Optional: close when clicking outside
+                        document.addEventListener('click', (e) => {
+                            if (!button.contains(e.target) && !menu.contains(e.target)) {
+                                menu.classList.add('hidden');
+                            }
+                        });
+                    </script>
+
+                    <div th:unless="${currentUser != null}">
+                        <a th:href="@{/login}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-700">Login</a>
+                        <a th:href="@{/register/requester}" class="px-3 py-2 rounded-md text-sm font-medium bg-white text-primary hover:bg-gray-100 ml-2">Register</a>
+                    </div>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-white hover:bg-blue-700 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden" x-show="open" @click.away="open = false">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a th:href="@{/}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Home</a>
+
+                <!-- Role-based links -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/admin/dashboard}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Dashboard</a>
+                </div>
+                <div sec:authorize="hasRole('OWNER')">
+                    <a th:href="@{/owner/dashboard}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Dashboard</a>
+                </div>
+                <div sec:authorize="hasRole('REQUESTER')">
+                    <a th:href="@{/requester/dashboard}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Dashboard</a>
+                </div>
+
+                <!-- Auth Links -->
+                <div th:if="${currentUser != null}" class="pt-4 border-t border-blue-800">
+                    <a th:href="@{/profile}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Profile</a>
+                    <a th:href="@{/logout}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Logout</a>
+                </div>
+                <div th:unless="${currentUser != null}" class="pt-4 border-t border-blue-800">
+                    <a th:href="@{/login}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-700">Login</a>
+                    <a th:href="@{/register/requester}" class="block px-3 py-2 rounded-md text-base font-medium bg-white text-primary hover:bg-gray-100 mt-1">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>

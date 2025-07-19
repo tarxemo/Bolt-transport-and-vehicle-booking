@@ -1,0 +1,61 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Requester Dashboard</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="bg-white shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-primary mb-4">Welcome, <span th:text="${currentUser.firstName}"></span>!</h2>
+        <p class="text-gray-600">Book your transportation easily with our platform.</p>
+
+        <div class="mt-6">
+            <a th:href="@{/requester/search}" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-700">
+                <i class="fas fa-search mr-2"></i> Find a Vehicle
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-medium text-gray-900">Your Recent Bookings</h3>
+            <a th:href="@{/requester/bookings}" class="text-sm text-primary hover:text-blue-700">View All</a>
+        </div>
+
+        <div th:if="${bookings.empty}" class="text-center py-4 text-gray-500">
+            <p>You don't have any bookings yet.</p>
+        </div>
+
+        <div th:unless="${bookings.empty}" class="space-y-4">
+            <div th:each="booking : ${bookings}" class="border rounded-lg p-4">
+                <div class="flex justify-between">
+                    <div>
+                        <h4 class="font-medium" th:text="'Booking #' + ${booking.id}"></h4>
+                        <p class="text-sm text-gray-500" th:text="${#temporals.format(booking.bookingTime, 'MMM dd, yyyy hh:mm a')}"></p>
+                    </div>
+                    <span th:class="${booking.status == 'Accepted' ? 'bg-green-100 text-green-800' :
+                 booking.status == 'Rejected' ? 'bg-red-100 text-red-800' :
+                 'bg-yellow-100 text-yellow-800'} + ' px-2 py-1 rounded-full text-xs font-medium'">
+    <span th:text="${booking.status}"></span>
+</span>
+
+                </div>
+
+                <div class="mt-2 flex items-center">
+                    <div class="flex-1">
+                        <p class="text-sm">
+                            <span th:text="${booking.vehicle.make} + ' ' + ${booking.vehicle.model}"></span>
+                            (<span th:text="${booking.vehicle.licensePlate}"></span>)
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            <span th:text="${booking.pickupLocation.name}"></span> to
+                            <span th:text="${booking.dropoffLocation.name}"></span>
+                        </p>
+                    </div>
+                    <a th:href="@{'/requester/bookings/' + ${booking.id}}" class="text-primary hover:text-blue-700 text-sm">Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

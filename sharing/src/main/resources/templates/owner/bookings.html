@@ -1,0 +1,96 @@
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Booking Requests</title>
+</head>
+<body>
+<section class="space-y-6">
+    <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-primary">Booking Requests</h1>
+        <a th:href="@{/owner/dashboard}" class="text-primary hover:text-blue-700">
+            <i class="fas fa-arrow-left mr-1"></i> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="border-b border-gray-200">
+            <nav class="flex -mb-px">
+                <a th:href="@{/owner/bookings}" th:class="${status == null} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                   class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+                    All Requests
+                </a>
+                <a th:href="@{/owner/bookings(status='Pending')}" th:class="${status == 'Pending'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                   class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+                    Pending
+                </a>
+                <a th:href="@{/owner/bookings(status='Accepted')}" th:class="${status == 'Accepted'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                   class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+                    Accepted
+                </a>
+                <a th:href="@{/owner/bookings(status='Rejected')}" th:class="${status == 'Rejected'} ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'"
+                   class="whitespace-nowrap py-4 px-4 border-b-2 font-medium text-sm">
+                    Rejected
+                </a>
+            </nav>
+        </div>
+
+        <div th:if="${bookings.empty}" class="text-center py-8">
+            <i class="fas fa-clipboard-list text-4xl text-gray-300 mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">No booking requests found</h3>
+            <p class="mt-1 text-sm text-gray-500" th:text="${status != null} ? 'No ' + ${status} + ' bookings' : 'You have no booking requests yet'"></p>
+        </div>
+
+        <table th:unless="${bookings.empty}" class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booking</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requester</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trip</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vehicle</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+            <tr th:each="booking : ${bookings}">
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900" th:text="'#' + ${booking.id}"></div>
+                    <div class="text-sm text-gray-500" th:text="${#temporals.format(booking.bookingTime, 'MMM dd, yyyy')}"></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900" th:text="${booking.requester.firstName} + ' ' + ${booking.requester.lastName}"></div>
+                    <div class="text-sm text-gray-500" th:text="${booking.requester.phoneNumber}"></div>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="text-sm text-gray-900" th:text="${booking.pickupLocation.name}"></div>
+                    <div class="text-sm text-gray-500 flex items-center">
+                        <i class="fas fa-arrow-down text-xs mr-1"></i>
+                        <span th:text="${booking.dropoffLocation.name}"></span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="text-sm text-gray-900" th:text="${booking.vehicle.make} + ' ' + ${booking.vehicle.model}"></div>
+                    <div class="text-sm text-gray-500" th:text="${booking.vehicle.licensePlate}"></div>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                            <span th:class="${booking.status == 'Accepted' ? 'bg-green-100 text-green-800' :
+                                             booking.status == 'Rejected' ? 'bg-red-100 text-red-800' :
+                                             'bg-yellow-100 text-yellow-800'} + ' px-2 py-1 rounded-full text-xs font-medium'">
+                                <span th:text="${booking.status}"></span>
+                            </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <a th:href="@{'/owner/bookings/' + ${booking.id}}" class="text-primary hover:text-blue-700 mr-4">Details</a>
+                    <a th:if="${booking.status == 'Pending'}"
+                       th:href="@{'/owner/bookings/approve/' + ${booking.id}}"
+                       class="text-green-600 hover:text-green-900 mr-4">Approve</a>
+                    <a th:if="${booking.status == 'Pending'}"
+                       th:href="@{'/owner/bookings/reject/' + ${booking.id}}"
+                       class="text-red-600 hover:text-red-900">Reject</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>
